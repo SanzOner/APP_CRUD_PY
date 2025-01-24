@@ -1,0 +1,95 @@
+{% include 'header.html' %}
+
+<h2 class="text-center">Lista de usuarios</h2>
+
+<div class="text-center">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">Crear uno nuevo</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Identificación</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Operaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td scope="row">{{ usuario['id'] }}</td>
+                <td>{{ usuario['nombre'] }}</td>
+                <td>{{ usuario['apellido'] }}</td>
+                <td>{{ usuario['fecha'] }}</td>
+                <td>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal{{ usuario['id'] }}">Editar</button>
+                    <a href="/usuarios/delete/{{ usuario['id'] }}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="editUserModal{{ usuario['id'] }}" tabindex="-1" aria-labelledby="editUserModalLabel{{ usuario['id'] }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel{{ usuario['id'] }}">Editar usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/usuarios/update/{{ usuario['id'] }}" method="post">
+                                <div class="mb-3">
+                                    <label for="nombre{{ usuario['id'] }}" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre{{ usuario['id'] }}" value="{{ usuario['nombre'] }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="apellido{{ usuario['id'] }}" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" name="apellido" id="apellido{{ usuario['id'] }}" value="{{ usuario['apellido'] }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fecha{{ usuario['id'] }}" class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" id="fecha{{ usuario['id'] }}" value="{{ usuario['fecha'] }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Create User Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalLabel">Crear usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/usuarios/create/guardar" method="post">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" name="apellido" id="apellido" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" name="fecha" id="fecha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
